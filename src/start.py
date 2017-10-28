@@ -17,6 +17,7 @@ import pandas as pd
 
 data_type = torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor
 def main():
+    print('IsCuda', torch.cuda.is_available())
     loss_fn = nn.CrossEntropyLoss().type(data_type)
     loader = BreedsLoader({
         'batch_size': 250
@@ -60,6 +61,7 @@ def load_last_checkpoint(checkpoints_path):
 def get_submission():
     (state_dict, epoch, iteration) = load_last_checkpoint('checkpoints')
     model = BreedsModel()
+    model = model.type(data_type)
     model.load_state_dict(state_dict)
     loader = BreedsLoader({'batch_size': 250, 'shuffle': False})
     df = pd.DataFrame(columns=loader.get_breeds())
