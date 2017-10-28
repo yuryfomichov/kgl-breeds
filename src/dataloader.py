@@ -26,6 +26,9 @@ class BreedsLoader(object):
     def get_val_loader(self):
         return self._get_loader(self.val_data, False, False)
 
+    def get_test_loader(self):
+        return self._get_loader(self.test_data, False, False)
+
     def get_submission_loader(self):
          return self._get_loader(self.submission_data, False, True)
 
@@ -43,9 +46,12 @@ class BreedsLoader(object):
         data = pd.read_csv('data/labels.csv')
         ids = data['id'].values
         labels = self._convert_lables(data['breed'].values)
-        (X_train, X_val, y_train, y_val) = train_test_split(ids, labels, test_size=self.validation_size,stratify=labels)
+        (X_train, x_temp, y_train, y_temp) = train_test_split(ids, labels, test_size=self.validation_size,stratify=labels)
         self.train_data = (X_train, y_train)
-        self.val_data = (X_train, y_train)
+
+        (X_val, X_test, y_val, y_test) = train_test_split(x_temp, y_temp, test_size=0.5,stratify=y_temp)
+        self.val_data = (X_val, y_val)
+        self.test_data = (X_test, y_test)
 
     def _load_submission_data(self):
         imageFolder = '%s/%s/' % (self.data_dir, self.test_folder)

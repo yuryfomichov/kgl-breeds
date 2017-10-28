@@ -20,7 +20,7 @@ def main():
     print('IsCuda', torch.cuda.is_available())
     loss_fn = nn.CrossEntropyLoss().type(data_type)
     loader = BreedsLoader({
-        'batch_size': 250
+        'batch_size': 200
     })
     model = BreedsModel()
     model = model.type(data_type)
@@ -31,7 +31,7 @@ def main():
     trainer.register_plugin(LossMonitor())
     trainer.register_plugin(ProgressMonitor())
     trainer.register_plugin(TimeMonitor())
-    trainer.register_plugin(ValidationPlugin(loader.get_val_loader(), loader.get_val_loader()))
+    trainer.register_plugin(ValidationPlugin(loader.get_val_loader(), loader.get_test_loader()))
     trainer.register_plugin(SaverPlugin('checkpoints/', False))
     trainer.register_plugin(Logger(['accuracy', 'loss', 'progress', 'time','validation_loss', 'test_loss']))
     trainer.run(epochs=10)
