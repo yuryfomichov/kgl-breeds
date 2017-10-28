@@ -1,9 +1,11 @@
 import torch.utils.data.dataloader as dataloader
 import torch as torch
 import pandas as pd
+import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn import preprocessing
 from src.dataset import BreedsDataset
+import os
 
 class BreedsLoader(object):
     def __init__(self, params):
@@ -16,6 +18,7 @@ class BreedsLoader(object):
         self.test_folder = 'test'
         self.labels_file = 'labels.csv'
         self._load_data()
+        self._load_submission_data()
 
     def get_train_loader(self):
         return self._get_loader(self.train_data, True, False)
@@ -23,8 +26,8 @@ class BreedsLoader(object):
     def get_val_loader(self):
         return self._get_loader(self.val_data, False, False)
 
-    # def get_test_loader(self):
-    #     return self._get_loader(False, True)
+    def get_submission_loader(self):
+         return self._get_loader(self.submission_data, False, True)
 
     def _get_loader(self, data, drop_last = False, is_test = True):
         imageFolder = '%s/%s/' % (self.data_dir, self.test_folder if is_test else self.train_folder)
@@ -39,19 +42,23 @@ class BreedsLoader(object):
     def _load_data(self):
         data = pd.read_csv('data/labels.csv')
         ids = data['id'].values
-        labels =  self._convert_lables(data['breed'].values)
-        (X_train, X_val, y_train, y_val) = train_test_split(ids, labels, test_size=self.validation_size,
-                                                            stratify=labels)
-
+        labels = self._convert_lables(data['breed'].values)
+        (X_train, X_val, y_train, y_val) = train_test_split(ids, labels, test_size=self.validation_size,stratify=labels)
         self.train_data = (X_train, y_train)
         self.val_data = (X_train, y_train)
 
+    def _load_submission_data(self):
+        imageFolder = '%s/%s/' % (self.data_dir, self.test_folder)
+        images = np.array(np.char.replace(os.listdir(imageFolder), '.jpg', ''))
+        labels = np.zeros(images.shape)
+        self.submission_data = (images, labels)
+
     def _convert_lables(self, labels):
         label_encoder = preprocessing.LabelEncoder()
-        label_encoder.fit(self._get_breeds());
+        label_encoder.fit(self.get_breeds());
         return label_encoder.transform(labels);
 
-    def _get_breeds(self):
+    def get_breeds(self):
         return [
             'affenpinscher',
             'afghan_hound',
