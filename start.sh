@@ -1,4 +1,4 @@
-cd kgl-dogs
+cd kgl-breeds
 source .env/bin/activate
 git pull origin master
 cd src

@@ -33,7 +33,7 @@ def main():
     trainer.register_plugin(ValidationPlugin(loader.get_val_loader(), loader.get_val_loader()))
     trainer.register_plugin(SaverPlugin('checkpoints/', False))
     trainer.register_plugin(Logger(['accuracy', 'loss', 'progress', 'time','validation_loss', 'test_loss']))
-    trainer.run(epochs=5)
+    trainer.run(epochs=10)
     checkpoint_data = load_last_checkpoint('checkpoints')
     # if checkpoint_data is not None:
     #     (state_dict, epoch, iteration) = checkpoint_data
