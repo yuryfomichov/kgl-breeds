@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn import preprocessing
-from src.dataset import BreedsDataset
+from dataset import BreedsDataset
 import os
 
 class BreedsLoader(object):

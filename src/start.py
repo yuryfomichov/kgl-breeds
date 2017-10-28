@@ -5,10 +5,10 @@ import torch.optim as optim
 from torch.autograd import Variable
 from torch.utils.trainer.trainer import Trainer
 from torch.utils.trainer.plugins import *
-from src.dataloader import BreedsLoader
-from src.model import BreedsModel
-from src.validationplugin import ValidationPlugin
-from src.saverplugin import SaverPlugin
+from dataloader import BreedsLoader
+from model import BreedsModel
+from validationplugin import ValidationPlugin
+from saverplugin import SaverPlugin
 import os
 import re
 import glob
