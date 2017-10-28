@@ -1,0 +1,7 @@
+*.swp
+*.pyc
+.evn/*
+.idea/*
+*.whl
+*.jpg
+*.jpeg
