@@ -22,6 +22,7 @@ def main():
         'batch_size': 250
     })
     model = BreedsModel()
+    model = model.type(data_type)
     optimizer = optim.Adam(model.parameters())
     trainer = Trainer(model=model, dataset=loader.get_train_loader(), criterion=loss_fn, optimizer=optimizer)
     trainer.cuda = True if torch.cuda.is_available() else False
