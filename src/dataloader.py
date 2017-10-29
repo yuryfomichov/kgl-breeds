@@ -49,7 +49,7 @@ class BreedsLoader(object):
         (X_train, x_temp, y_train, y_temp) = train_test_split(ids, labels, test_size=self.validation_size,stratify=labels)
         self.train_data = (X_train, y_train)
 
-        (X_val, X_test, y_val, y_test) = train_test_split(x_temp, y_temp, test_size=0.5,stratify=y_temp)
+        (X_val, X_test, y_val, y_test) = train_test_split(x_temp, y_temp, test_size=0.25,stratify=y_temp)
         self.val_data = (X_val, y_val)
         self.test_data = (X_test, y_test)
 
