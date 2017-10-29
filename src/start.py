@@ -18,7 +18,7 @@ def main():
     print('IsCuda', torch.cuda.is_available())
     loss_fn = nn.CrossEntropyLoss().type(data_type)
     loader = BreedsLoader({
-        'batch_size': 200
+        'batch_size': 187
     })
     model = BreedsModel().type(data_type)
     optimizer = optim.Adam(model.classifier.parameters())
@@ -52,7 +52,7 @@ def get_submission():
     model = BreedsModel()
     model = model.type(data_type)
     model.load_state_dict(state_dict)
-    loader = BreedsLoader({'batch_size': 200, 'shuffle': False})
+    loader = BreedsLoader({'batch_size': 217, 'shuffle': False})
     df = pd.DataFrame(columns=loader.get_breeds())
     model.eval()
     for x, y in loader.get_submission_loader():
