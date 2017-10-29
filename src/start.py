@@ -18,12 +18,12 @@ def main():
     print('IsCuda', torch.cuda.is_available())
     loss_fn = nn.CrossEntropyLoss().type(data_type)
     loader = BreedsLoader({
-        'batch_size': 187
+        'batch_size': 230
     })
     model = BreedsModel().type(data_type)
     optimizer = optim.Adam(model.classifier.parameters())
     trainer = BreedsTrainer(model, loader, loss_fn, optimizer)
-    trainer.run(lrs=[1e-3, 2e-4, 5e-5, 1e-5], epochs=[5,5,5,5])
+    trainer.run(lrs=[1e-3, 3e-4, 1e-4, 4e-5], epochs=[4,4,4,4])
     #checkpoint_data = load_last_checkpoint('checkpoints')
     # if checkpoint_data is not None:
     #     (state_dict, epoch, iteration) = checkpoint_data
@@ -52,7 +52,7 @@ def get_submission():
     model = BreedsModel()
     model = model.type(data_type)
     model.load_state_dict(state_dict)
-    loader = BreedsLoader({'batch_size': 217, 'shuffle': False})
+    loader = BreedsLoader({'batch_size': 202, 'shuffle': False})
     df = pd.DataFrame(columns=loader.get_breeds())
     model.eval()
     for x, y in loader.get_submission_loader():
