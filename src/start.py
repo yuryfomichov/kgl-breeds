@@ -21,7 +21,7 @@ def main():
         'batch_size': 150
     })
     model = BreedsModel().type(data_type)
-    optimizer = optim.Adam(model.parameters())
+    optimizer = optim.Adam(model.classifier.parameters())
     trainer = BreedsTrainer(model, loader, loss_fn, optimizer)
     trainer.run(lrs=[1e-3, 5e-4, 2e-4, 1e-4], epochs=[1,1,1,1])
     #checkpoint_data = load_last_checkpoint('checkpoints')
