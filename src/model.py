@@ -1,51 +1,27 @@
 import torch.nn as nn
 import math
-
+import torchvision.models as models
 
 class BreedsModel(nn.Module):
     def __init__(self, num_classes=120):
         super(BreedsModel, self).__init__()
-
-        self.features = nn.Sequential(
-            nn.Conv2d(3, 32, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(32),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),
-            nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(64),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),
-            nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(128),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),
-            nn.Conv2d(128, 192, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(192),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),
-            nn.Conv2d(192, 256, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(256),
-            nn.ReLU(inplace=True),
-            nn.AvgPool2d(kernel_size=12)
-        )
-
-        self.secondNet = nn.Sequential(
-            nn.Linear(256, 1024),
-            nn.BatchNorm1d(1024),
+        vgg = models.vgg11()
+        self.features = vgg.features
+        self.classifier = nn.Sequential(
+            nn.Linear(512 * 7 * 7, 4096),
             nn.ReLU(True),
-            nn.Linear(1024, 1024),
-            nn.BatchNorm1d(1024),
+            nn.Dropout(),
+            nn.Linear(4096, 4096),
             nn.ReLU(True),
-            nn.Linear(1024, num_classes),
+            nn.Dropout(),
+            nn.Linear(4096, num_classes),
         )
-
         self._initialize_weights()
 
     def forward(self, x):
         x = self.features(x)
         x = x.view(x.size(0), -1)
-        x = self.secondNet(x)
-
+        x = self.classifier(x)
         return x
 
     def _initialize_weights(self):

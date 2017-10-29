@@ -23,7 +23,7 @@ def main():
     model = BreedsModel().type(data_type)
     optimizer = optim.Adam(model.parameters())
     trainer = BreedsTrainer(model, loader, loss_fn, optimizer)
-    trainer.run(lrs=[3e-3, 1e-3, 5e-4, 1e-4], epochs=[8,8,8,8])
+    trainer.run(lrs=[1e-3, 5e-4, 2e-4, 1e-4], epochs=[1,1,1,1])
     #checkpoint_data = load_last_checkpoint('checkpoints')
     # if checkpoint_data is not None:
     #     (state_dict, epoch, iteration) = checkpoint_data
@@ -52,7 +52,7 @@ def get_submission():
     model = BreedsModel()
     model = model.type(data_type)
     model.load_state_dict(state_dict)
-    loader = BreedsLoader({'batch_size': 250, 'shuffle': False})
+    loader = BreedsLoader({'batch_size': 200, 'shuffle': False})
     df = pd.DataFrame(columns=loader.get_breeds())
     model.eval()
     for x, y in loader.get_submission_loader():
