@@ -29,4 +29,5 @@ class BreedsTrainer(object):
                 param_group['lr'] = lr
             print('lr is set to:' + str(lr))
             print('train for epoch: ' + str(epoch))
+            self.trainer.dataset = self.loader.get_train_loader()
             self.trainer.run(epochs = epoch)
