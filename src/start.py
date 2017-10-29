@@ -1,19 +1,17 @@
-import torch as torch
-import torch.nn as nn
-import numpy as np
-import torch.optim as optim
-from torch.autograd import Variable
-from torch.utils.trainer.trainer import Trainer
-from torch.utils.trainer.plugins import *
-from dataloader import BreedsLoader
-from model import BreedsModel
-from validationplugin import ValidationPlugin
-from saverplugin import SaverPlugin
+import glob
 import os
 import re
-import glob
-from natsort import natsorted
+import numpy as np
 import pandas as pd
+import torch as torch
+import torch.nn as nn
+import torch.optim as optim
+from natsort import natsorted
+from torch.autograd import Variable
+from dataloader import BreedsLoader
+from model import BreedsModel
+from trainer.trainer import BreedsTrainer
+from trainer.plugins.saverplugin import SaverPlugin
 
 data_type = torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor
 def main():
@@ -22,20 +20,11 @@ def main():
     loader = BreedsLoader({
         'batch_size': 200
     })
-    model = BreedsModel()
-    model = model.type(data_type)
+    model = BreedsModel().type(data_type)
     optimizer = optim.Adam(model.parameters())
-    trainer = Trainer(model=model, dataset=loader.get_train_loader(), criterion=loss_fn, optimizer=optimizer)
-    trainer.cuda = True if torch.cuda.is_available() else False
-    trainer.register_plugin(AccuracyMonitor())
-    trainer.register_plugin(LossMonitor())
-    trainer.register_plugin(ProgressMonitor())
-    trainer.register_plugin(TimeMonitor())
-    trainer.register_plugin(ValidationPlugin(loader.get_val_loader(), loader.get_test_loader()))
-    trainer.register_plugin(SaverPlugin('checkpoints/', False))
-    trainer.register_plugin(Logger(['accuracy', 'loss', 'progress', 'time','validation_loss', 'test_loss']))
-    trainer.run(epochs=20)
-    checkpoint_data = load_last_checkpoint('checkpoints')
+    trainer = BreedsTrainer(model, loader, loss_fn, optimizer)
+    trainer.run(lrs=[1e-2, 5e-3, 2e-3, 1e-3], epochs=[8,8,8,8])
+    #checkpoint_data = load_last_checkpoint('checkpoints')
     # if checkpoint_data is not None:
     #     (state_dict, epoch, iteration) = checkpoint_data
     #     trainer.epochs = epoch
