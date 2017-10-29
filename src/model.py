@@ -5,16 +5,16 @@ import torchvision.models as models
 class BreedsModel(nn.Module):
     def __init__(self, num_classes=120):
         super(BreedsModel, self).__init__()
-        vgg = models.vgg11(pretrained=True)
+        vgg = models.vgg16(pretrained=True)
         self.features = vgg.features
         self.classifier = nn.Sequential(
-            nn.Linear(512 * 7 * 7, 1024),
+            nn.Linear(512 * 7 * 7, 2048),
             nn.ReLU(True),
             nn.Dropout(),
-            nn.Linear(1024, 1024),
+            nn.Linear(2048, 2048),
             nn.ReLU(True),
             nn.Dropout(),
-            nn.Linear(1024, num_classes),
+            nn.Linear(2048, num_classes),
         )
         self._require_grad_false()
         self._initialize_weights()
