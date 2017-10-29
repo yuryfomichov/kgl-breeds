@@ -8,16 +8,13 @@ class BreedsModel(nn.Module):
         vgg = models.vgg19(pretrained=True)
         self.features = vgg.features
         self.classifier = nn.Sequential(
-            nn.Linear(512 * 7 * 7, 1024),
+            nn.Linear(512 * 7 * 7, 512),
             nn.ReLU(True),
-            nn.BatchNorm1d(1024),
-            nn.Linear(1024, 1024),
+            nn.BatchNorm1d(512),
+            nn.Linear(512, 512),
             nn.ReLU(True),
-            nn.BatchNorm1d(1024),
-            nn.Linear(1024, 1024),
-            nn.ReLU(True),
-            nn.BatchNorm1d(1024),
-            nn.Linear(1024, num_classes),
+            nn.BatchNorm1d(512),
+            nn.Linear(512, num_classes),
         )
         self._require_grad_false()
         self._initialize_weights()
