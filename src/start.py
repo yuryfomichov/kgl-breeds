@@ -23,7 +23,7 @@ def main():
     model = BreedsModel().type(data_type)
     optimizer = optim.Adam(model.parameters())
     trainer = BreedsTrainer(model, loader, loss_fn, optimizer)
-    trainer.run(lrs=[1e-2, 5e-3, 2e-3, 1e-3], epochs=[8,8,8,8])
+    trainer.run(lrs=[3e-3, 1e-3, 5e-4, 1e-4], epochs=[8,8,8,8])
     #checkpoint_data = load_last_checkpoint('checkpoints')
     # if checkpoint_data is not None:
     #     (state_dict, epoch, iteration) = checkpoint_data
